@@ -1,9 +1,9 @@
 #' @include utils.R
-scratch_config_type_handler <- function(valid, option, ...) {
-  UseMethod("scratch_config_type_handler")
+roptgen_validate <- function(valid, option, ...) {
+  UseMethod("roptgen_validate")
 }
 
-scratch_config_type_handler_base <- function(valid, option, ...) {
+roptgen_validate_base <- function(valid, option, ...) {
   if (all(valid == 0)) {
     return(function(value) {
       if (wrong_prototype(value, valid)) {
@@ -18,16 +18,16 @@ scratch_config_type_handler_base <- function(valid, option, ...) {
     value
   }
 }
-scratch_config_type_handler.default <- function(valid, option, ...) {
+roptgen_validate.default <- function(valid, option, ...) {
   if (is.null(valid)) {
     return(option)
   }
   stop("A validation handler does not exist for this type/class.")
 }
-scratch_config_type_handler.double <- scratch_config_type_handler_base
-scratch_config_type_handler.logical <- scratch_config_type_handler_base
-scratch_config_type_handler.integer <- scratch_config_type_handler_base
-scratch_config_type_handler.character <- function(valid, option, partial, ...) {
+roptgen_validate.double <- roptgen_validate_base
+roptgen_validate.logical <- roptgen_validate_base
+roptgen_validate.integer <- roptgen_validate_base
+roptgen_validate.character <- function(valid, option, partial, ...) {
   if (all(valid == "")) {
     return(function(value) {
       if (wrong_prototype(value, valid)) {
@@ -53,11 +53,11 @@ scratch_config_type_handler.character <- function(valid, option, partial, ...) {
   }
 }
 
-scratch_config_type_handler.list <- function(valid, option, ...) {
+roptgen_validate.list <- function(valid, option, ...) {
   # return a function which checks each condition, as long as one is true we are good
   type_handlers <- vector(mode = "list", length(valid))
   for (k in seq_along(type_handlers)) {
-    type_handlers[[k]] <- scratch_config_type_handler(valid[[k]], option, ...)
+    type_handlers[[k]] <- roptgen_validate(valid[[k]], option, ...)
   }
   function(value) {
     passes <- vector(mode = "list", length = length(type_handlers))
@@ -89,7 +89,7 @@ scratch_config_type_handler.list <- function(valid, option, ...) {
     return(value)
   }
 }
-scratch_config_type_handler.function <- function(valid, option) {
+roptgen_validate.function <- function(valid, option) {
   force(option)
   f.n <- valid
   function(value) {
@@ -103,13 +103,13 @@ scratch_config_type_handler.function <- function(valid, option) {
   }
 }
 
-# scratch_config_type_handler(c('a'), "my.option")('c')
-# scratch_config_type_handler(c('a'), "my.option")('a')
+# roptgen_validate(c('a'), "my.option")('c')
+# roptgen_validate(c('a'), "my.option")('a')
 #
-# scratch_config_type_handler.character(c('a'), "my.option", FALSE)('c')
-# scratch_config_type_handler.list(list('a', 1, TRUE), 'weird1', FALSE)('meh')
-# scratch_config_type_handler.list(list(list('a', 'meh'), 1, TRUE), 'weird1')(FALSE)
-# scratch_config_type_handler.list(list(NA_character_, rep(NA_integer_, 4), TRUE), 'weird1')('meh')
+# roptgen_validate.character(c('a'), "my.option", FALSE)('c')
+# roptgen_validate.list(list('a', 1, TRUE), 'weird1', FALSE)('meh')
+# roptgen_validate.list(list(list('a', 'meh'), 1, TRUE), 'weird1')(FALSE)
+# roptgen_validate.list(list(NA_character_, rep(NA_integer_, 4), TRUE), 'weird1')('meh')
 
 # # Each option should have a list of methods/slots
 # value
