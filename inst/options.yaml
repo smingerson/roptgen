@@ -1,26 +1,28 @@
 overview:
-  doucmentation: >
-    #' User-level configuration for `r basename(getwd())`
+  documentation: >
+    #' @title User-level configuration for `r basename(getwd())`
     #'
-    #' Configure `r basename(getwd())` to your liking. Options can be set in any of the following ways:
+    #' @description Configure `r basename(getwd())` to your liking. Options can be set in any of the following ways:
     #'  1. In \R via `options()`, where the name should be `roptgen.<name>`.
-    #'  2. Via environment variables, replacing the periods in the option name with underscores,underscores
-    #'      such as `ROPTGEN_TEST_DIR`. If both the \R option and environment variable are present, the
+    #'
+    #'  2. Via environment variables, replacing the periods in the option name with underscores. For example,
+    #'      the option 'roptgen.test.dir' becomes the environment variable `ROPTGEN_TEST_DIR`.
+    #'      If both the \R option and environment variable are present, the
     #'      \R option takes precedence.
+    #'
     #'  3. Some functions expose arguments which use the value of an option as the default. These can
     #'      be overridden when needed.
     #'
     #' If an invalid option is provided, functions may either fall back to the default or error, presenting
     #'   the valid options.
     #'
-    #' Environment variables can be preferred over \R options since environment variables will also be
-    #'   available to child processes. To set these environment variables or \R options across many projects,
+    #' Environment variables may be preferable over \R options since environment variables will also be
+    #'   available to any child processes. To set these environment variables or \R options across many projects,
     #'   consider using an .Rprofile or .Renviron file, as documented in ?.Renviron.
-    #' @export
 options:
   - name: roptgen.object
     type: !expr character(1L)
-    default: !expr paste(basename(getwd(), 'options', sep = '_'))
+    default: !expr paste(basename(getwd()), 'options', sep = '_')
     check: !expr function(x)
       {if (make.names(x) != x) {stop("Option \"roptgen.object\" must be a syntactically valid R name.")} else TRUE}
     description: >
@@ -34,21 +36,21 @@ options:
       The path to the yaml file documenting package options. Defaults to inst/options.yaml.
   - name: roptgen.file.out
     type: !expr character(1L)
-    default: !expr file.path(getwd(), "R", 'options')
+    default: !expr file.path("R", 'options')
     check: !expr file.exists
     description: >
       The file path to write the generated code to. Defaults to `R/options`. The extension will be
       set automatically.
   - name: roptgen.inline
-    type: c(TRUE, FALSE)
-    default: TRUE
+    type: !expr c(TRUE, FALSE)
+    default: FALSE
     description: >
       Whether to inline all code which roptgen depends on for reading and validating options. If
       `TRUE`, the helper file will be the roptgen.file.out option with '-helpers' appended.
       The benefit of inlining is you do not need to take a dependency on roptgen (not even in Suggests!),
       the drawback, from certain perspectives, is you won't benefit from any bug fixes in
       roptgen after you have generated your option file, unless you regenerate it.
-      Note there is an extensive suite of tests, which can also be copied into your project.
+      One day, there will be an extensive suite of tests, which can also be copied into your project.
   - name: roptgen.test
     type: list(FALSE, c("tinytest", "testthat")
     default: FALSE
@@ -58,7 +60,7 @@ options:
       Defaults to `FALSE`, and not copying tests into your package.
   - name: roptgen.test.dir
     type: !expr character(1L)
-    default: !expr roptgen_test_dir
+    default: !expr function() roptgen_test_dir()
     check: !expr dir.exists
     description: >
       The directory to copy the tests. Make sure to also set "roptgen.test".
