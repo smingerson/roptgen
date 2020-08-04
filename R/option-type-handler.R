@@ -6,14 +6,14 @@ roptgen_validate <- function(valid, option, ...) {
 roptgen_validate_base <- function(valid, option, ...) {
   if (all(valid == 0)) {
     return(function(value) {
-      if (wrong_prototype(value, valid)) {
-        opt_stop_invalid_vec(option, valid)
+      if (is_wrong_prototype(value, valid)) {
+        stop_invalid_vec(option, valid)
       }
     })
   }
   function(value) {
     if (not_in(value, valid)) {
-      opt_stop_invalid_choice(option, valid)
+      stop_invalid_choice(option, valid)
     }
     value
   }
@@ -30,15 +30,15 @@ roptgen_validate.integer <- roptgen_validate_base
 roptgen_validate.character <- function(valid, option, partial, ...) {
   if (all(valid == "")) {
     return(function(value) {
-      if (wrong_prototype(value, valid)) {
-        opt_stop_invalid_vec(option, valid)
+      if (is_wrong_prototype(value, valid)) {
+        stop_invalid_vec(option, valid)
       }
     })
   }
   function(value) {
     # If we are provided a vector of choices, presumption is we only pick 1
     if (length(value) > 1) {
-      opt_stop_invalid_choice(option, dQuote(valid))
+      stop_invalid_choice(option, dQuote(valid))
     }
     if (partial) {
       has_match <- pmatch(value, valid)
@@ -47,7 +47,7 @@ roptgen_validate.character <- function(valid, option, partial, ...) {
       }
     }
     if (not_in(value, valid)) {
-      opt_stop_invalid_choice(option, dQuote(valid))
+      stop_invalid_choice(option, dQuote(valid))
     }
     value
   }
