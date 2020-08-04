@@ -43,25 +43,25 @@ roptgen_options  <- function() {}
 rm(roptgen_options)
 roptgen_options  <- list(
 file.in = function(value = NULL, ..., .default = "inst/options.yaml") {
-    ropt_config_get(name = "roptgen.file.in", value = value, type = "", 
-        default = "inst/options.yaml", check = function(...) 
+    ropt_get(name = "roptgen.file.in", value = value, type = "", default = "inst/options.yaml", 
+        check = function(...) 
         .Internal(file.exists(c(...))), partial = FALSE, args = list(...))
 },
 
 file.out = function(value = NULL, ..., .default = "R/options") {
-    ropt_config_get(name = "roptgen.file.out", value = value, type = "", 
-        default = "R/options", check = function(...) 
+    ropt_get(name = "roptgen.file.out", value = value, type = "", default = "R/options", 
+        check = function(...) 
         .Internal(file.exists(c(...))), partial = FALSE, args = list(...))
 },
 
 inline = function(value = NULL, ..., .default = FALSE) {
-    ropt_config_get(name = "roptgen.inline", value = value, type = c(TRUE, 
-    FALSE), default = FALSE, check = NULL, partial = FALSE, args = list(...))
+    ropt_get(name = "roptgen.inline", value = value, type = c(TRUE, FALSE
+    ), default = FALSE, check = NULL, partial = FALSE, args = list(...))
 },
 
 object = function(value = NULL, ..., .default = "roptgen_options") {
-    ropt_config_get(name = "roptgen.object", value = value, type = "", 
-        default = "roptgen_options", check = function(x) 
+    ropt_get(name = "roptgen.object", value = value, type = "", default = "roptgen_options", 
+        check = function(x) 
         {
             if (make.names(x) != x) {
                 stop("Option \"roptgen.object\" must be a syntactically valid R name.")
@@ -71,21 +71,19 @@ object = function(value = NULL, ..., .default = "roptgen_options") {
 },
 
 test = function(value = NULL, ..., .default = FALSE) {
-    ropt_config_get(name = "roptgen.test", value = value, type = "list(FALSE, c(\"tinytest\", \"testthat\")", 
+    ropt_get(name = "roptgen.test", value = value, type = "list(FALSE, c(\"tinytest\", \"testthat\")", 
         default = FALSE, check = NULL, partial = FALSE, args = list(...))
 },
 
 test.dir = function(value = NULL, ..., .default = function() 
 roptgen_test_dir()) {
-    ropt_config_get(name = "roptgen.test.dir", value = value, type = "", 
-        default = function() 
-        roptgen_test_dir(), check = function(paths) 
-        .Internal(dir.exists(paths)), partial = FALSE, args = list(...))
+    ropt_get(name = "roptgen.test.dir", value = value, type = "", default = function() 
+    roptgen_test_dir(), check = function(paths) 
+    .Internal(dir.exists(paths)), partial = FALSE, args = list(...))
 },
 
 test.file = function(value = NULL, ..., .default = "test-roptgen-options.R") {
-    ropt_config_get(name = "roptgen.test.file", value = value, type = "", 
-        default = "test-roptgen-options.R", check = NULL, partial = FALSE, 
-        args = list(...))
+    ropt_get(name = "roptgen.test.file", value = value, type = "", default = "test-roptgen-options.R", 
+        check = NULL, partial = FALSE, args = list(...))
 }
 )
