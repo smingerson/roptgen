@@ -10,7 +10,7 @@ call_if_fun <- function(fn, args) {
   fn
 }
 #' @include utils.R
-#' @include option-type-handler.R
+#' @include type-handlers.R
 return_option_if_present_and_valid <- function(name, value, type, default, check, args, partial) {
   opt <- getOption(name)
   opt_envvar <- "option"
