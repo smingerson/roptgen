@@ -12,11 +12,15 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
+Imports: yaml,
+    utils
 Collate: 
+    'defaults.R'
+    'errors.R'
+    'generate.R'
     'utils.R'
-    'option-type-handler.R'
-    'option-get.R'
-    'options-generate.R'
+    'type-handlers.R'
+    'get.R'
     'options.R'
     'zzz.R'
 Roxygen: list(markdown = TRUE)
