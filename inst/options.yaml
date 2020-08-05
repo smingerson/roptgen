@@ -22,7 +22,7 @@ overview:
 options:
   - name: roptgen.object
     type: !expr character(1L)
-    default: !expr paste(basename(getwd()), 'options', sep = '_')
+    default: !expr function() {paste(basename(getwd()), 'options', sep = '_')}
     check: !expr function(x)
       {if (make.names(x) != x) {stop("Option \"roptgen.object\" must be a syntactically valid R name.")} else TRUE}
     description: >

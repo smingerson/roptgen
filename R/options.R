@@ -59,15 +59,19 @@ inline = function(value = NULL, ..., .default = FALSE) {
     ), default = FALSE, check = NULL, partial = FALSE, args = list(...))
 },
 
-object = function(value = NULL, ..., .default = "roptgen_options") {
-    ropt_get(name = "roptgen.object", value = value, type = "", default = "roptgen_options", 
-        check = function(x) 
-        {
-            if (make.names(x) != x) {
-                stop("Option \"roptgen.object\" must be a syntactically valid R name.")
-            }
-            else TRUE
-        }, partial = FALSE, args = list(...))
+object = function(value = NULL, ..., .default = function() {
+    paste(basename(getwd()), "options", sep = "_")
+}) {
+    ropt_get(name = "roptgen.object", value = value, type = "", default = function() 
+    {
+        paste(basename(getwd()), "options", sep = "_")
+    }, check = function(x) 
+    {
+        if (make.names(x) != x) {
+            stop("Option \"roptgen.object\" must be a syntactically valid R name.")
+        }
+        else TRUE
+    }, partial = FALSE, args = list(...))
 },
 
 test = function(value = NULL, ..., .default = FALSE) {
